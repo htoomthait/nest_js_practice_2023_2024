@@ -41,6 +41,6 @@ async function bootstrap() {
     const file = await fs.readFileSync(join(process.cwd(), '.env'), 'utf-8');
     Logger.log(`dot env file path: ${join(process.cwd(), '.env')}`);
     Logger.log(`.env file: ${JSON.stringify(file)}`, 'Bootstrap');
-  }, 1000); // it usually refresh after 2 times of restart, but it is updated actually in target file
+  }, 1000);
 }
 bootstrap();
