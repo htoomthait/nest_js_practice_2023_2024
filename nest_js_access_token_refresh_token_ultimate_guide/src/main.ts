@@ -1,6 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { Logger, StreamableFile } from '@nestjs/common';
+import { Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as fs from 'fs';
 import { join } from 'path';
@@ -42,5 +42,10 @@ async function bootstrap() {
     Logger.log(`dot env file path: ${join(process.cwd(), '.env')}`);
     Logger.log(`.env file: ${JSON.stringify(file)}`, 'Bootstrap');
   }, 1000);
+
+  Logger.log(
+    `local database url: ${process.env.LOCAL_DATABASE_URL}`,
+    'Bootstrap',
+  );
 }
 bootstrap();
