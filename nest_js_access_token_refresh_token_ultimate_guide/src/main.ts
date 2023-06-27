@@ -42,10 +42,5 @@ async function bootstrap() {
     Logger.log(`dot env file path: ${join(process.cwd(), '.env')}`);
     Logger.log(`.env file: ${JSON.stringify(file)}`, 'Bootstrap');
   }, 1000);
-
-  Logger.log(
-    `local database url: ${process.env.LOCAL_DATABASE_URL}`,
-    'Bootstrap',
-  );
 }
 bootstrap();
