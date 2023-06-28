@@ -3,6 +3,7 @@
 /node_modules
 
 # local dot env files
+.env
 .env.development.local
 
 # Logs
