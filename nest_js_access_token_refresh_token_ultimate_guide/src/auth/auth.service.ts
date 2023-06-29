@@ -5,9 +5,14 @@ import { AuthSignUpDto, AuthSignInDto } from './dto';
 import { Tokens } from './types';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import * as argon from 'argon2';
 import { Logger } from '@nestjs/common';
-import { hashData, updateRtHash, getTokens } from 'src/common/helpers';
+import * as argon from 'argon2';
+import {
+  hashData,
+  updateRtHash,
+  getTokens,
+  compareHashData,
+} from 'src/common/helpers';
 
 @Injectable()
 export class AuthService {
@@ -133,16 +138,24 @@ export class AuthService {
       throw new ForbiddenException('Access Denied');
     }
 
-    // verify refresh token
-    const rtMatches = await argon.verify(authUser.hashedRt, rt);
+    // verify stored refresh token and submitted refresh token
+    const rtMatches = rt === authUser.hashedRt;
+
     if (!rtMatches) throw new ForbiddenException('Access Denied');
 
-    // update refresh token hash in db
+    // compose return value
     const returnValue = await getTokens(
       this._jwtService,
       this._configService,
       authUser.id,
       authUser.email,
+    );
+
+    // update refresh token hash in db
+    await updateRtHash(
+      this._prismaService,
+      authUser.id,
+      returnValue.refresh_token,
     );
 
     return returnValue;

@@ -6,7 +6,7 @@ import { Request } from 'express';
 import { Injectable, ForbiddenException } from '@nestjs/common';
 
 @Injectable()
-export class RtStragey extends PassportStrategy(Strategy, 'jwt-refresh-token') {
+export class RtStragey extends PassportStrategy(Strategy, 'jwt-refresh') {
   constructor(config: ConfigService) {
     super({
       jwtFromRequest:

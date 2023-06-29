@@ -15,13 +15,15 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
   await app.listen(process.env.RUNNING_PORT || 5000);
 
+  const _configService = app.get(ConfigService);
+
   Logger.log(
     `Server running on http://localhost:${process.env.RUNNING_PORT}`,
     'Bootstrap',
   );
 
   Logger.log(
-    `database url: ${configService.get<string>('database.databaseURL')}`,
+    `database url: ${_configService.get<string>('database.databaseURL')}`,
     'Bootstrap',
   );
 
@@ -34,7 +36,7 @@ async function bootstrap() {
   const file = await fs.readFileSync(join(process.cwd(), '.env'), 'utf-8');
   const updateData = file.replace(
     /DATABASE_URL\b.*$/g,
-    `DATABASE_URL=${configService.get<string>('database.databaseURL')}`,
+    `DATABASE_URL=${_configService.get<string>('database.databaseURL')}`,
   );
 
   await fs.writeFileSync(join(process.cwd(), '.env'), updateData, 'utf-8');
@@ -49,7 +51,7 @@ async function bootstrap() {
 
   // check jwt secret key
   Logger.log(
-    `jwt at secrect key : ${configService.get<string>(
+    `jwt at secrect key : ${_configService.get<string>(
       'jwt.accessTokenSecret',
     )}`,
     'jwt key check',

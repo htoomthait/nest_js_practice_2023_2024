@@ -1,8 +1,16 @@
-import { Body, Controller, Post, HttpCode, HttpStatus } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Post,
+  HttpCode,
+  HttpStatus,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthSignUpDto, AuthSignInDto } from './dto';
 import { Tokens } from './types';
 import { Public, GetCurrentUserId } from '../common/decorators';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('auth')
 export class AuthController {
@@ -26,6 +34,7 @@ export class AuthController {
   }
 
   @Public()
+  @UseGuards(AuthGuard('jwt'))
   @Post('/logout')
   @HttpCode(HttpStatus.OK)
   logout(@GetCurrentUserId() userId: number): Promise<boolean> {
@@ -33,12 +42,13 @@ export class AuthController {
   }
 
   @Public()
+  @UseGuards(AuthGuard('jwt-refresh'))
   @Post('/refresh')
   @HttpCode(HttpStatus.OK)
   refreshTokens(
     @GetCurrentUserId() userId: number,
-    @Body() rt: string,
+    @Body() payload,
   ): Promise<Tokens> {
-    return this._authService.refreshTokens(userId, rt);
+    return this._authService.refreshTokens(userId, payload.rt);
   }
 }
