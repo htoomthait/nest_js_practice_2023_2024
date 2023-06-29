@@ -4,6 +4,7 @@ import { AuthModule } from './auth/auth.module';
 import { PrismaModule } from './prisma/prisma.module';
 import database from './config/database.config';
 import jwt from './config/jwt.config';
+import log from './config/log.config';
 
 @Module({
   imports: [
@@ -17,7 +18,7 @@ import jwt from './config/jwt.config';
         '.env.development.testing',
         '.env.production',
       ],
-      load: [database, jwt],
+      load: [database, jwt, log],
     }),
     AuthModule,
     PrismaModule,

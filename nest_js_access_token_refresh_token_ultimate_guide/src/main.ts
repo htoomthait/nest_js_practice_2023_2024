@@ -1,16 +1,19 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { Logger, ValidationPipe } from '@nestjs/common';
+import { LogLevel, Logger, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as fs from 'fs';
 import { join } from 'path';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const configService = new ConfigService();
+
+  const app = await NestFactory.create(AppModule, {
+    logger: configService.get<LogLevel[]>('log.loggerLevel'),
+  });
+
   app.useGlobalPipes(new ValidationPipe());
   await app.listen(process.env.RUNNING_PORT || 5000);
-
-  const configService = app.get(ConfigService);
 
   Logger.log(
     `Server running on http://localhost:${process.env.RUNNING_PORT}`,

@@ -1,5 +1,5 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { AuthSignUpDto, AuthSignInDto } from './dto';
 import { Tokens } from './types';
@@ -35,6 +35,7 @@ export class AuthService {
     // Create New User
     const newUser = await this._prismaService.user
       .create({
+        // Create User data
         data: {
           ...authSignUpDto,
           phone: Number(authSignUpDto.phone),
@@ -42,6 +43,7 @@ export class AuthService {
         },
       })
       .catch((error) => {
+        // Check if Error is PrismaClientKnownRequestError
         if (error instanceof PrismaClientKnownRequestError) {
           if (error.code === 'P2002') {
             throw new ForbiddenException('Credentials incorrect');
@@ -49,6 +51,7 @@ export class AuthService {
         }
         throw error;
       });
+
     // Get Tokens if New User is Created
     if (newUser) {
       returnValue = await getTokens(

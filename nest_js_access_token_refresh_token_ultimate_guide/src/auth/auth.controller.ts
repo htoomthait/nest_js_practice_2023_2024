@@ -8,7 +8,7 @@ import { Public, GetCurrentUserId } from '../common/decorators';
 export class AuthController {
   private _authService: AuthService;
 
-  constructor(private authService: AuthService) {
+  constructor(authService: AuthService) {
     this._authService = authService;
   }
   @Public()
