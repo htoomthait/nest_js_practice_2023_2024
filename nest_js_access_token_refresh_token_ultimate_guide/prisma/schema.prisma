@@ -17,9 +17,9 @@ model User {
   updatedAt DateTime @updatedAt
 
 
-  email String @unique
-  phone String?
-  hash String
+  email String @unique @db.VarChar(255)
+  phone BigInt @unique @db.UnsignedBigInt
+  hash String  @db.VarChar(512)
   hashedRt String?
 
   @@map("users") // mapping to users table

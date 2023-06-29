@@ -1,12 +1,13 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { Logger } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as fs from 'fs';
 import { join } from 'path';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.useGlobalPipes(new ValidationPipe());
   await app.listen(process.env.RUNNING_PORT || 5000);
 
   const configService = app.get(ConfigService);
@@ -29,7 +30,7 @@ async function bootstrap() {
   /*#region ENV file update database url */
   const file = await fs.readFileSync(join(process.cwd(), '.env'), 'utf-8');
   const updateData = file.replace(
-    /DATABASE_URL=\b.*$/g,
+    /DATABASE_URL\b.*$/g,
     `DATABASE_URL=${configService.get<string>('database.databaseURL')}`,
   );
 
