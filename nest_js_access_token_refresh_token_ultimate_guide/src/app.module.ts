@@ -3,12 +3,13 @@ import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { PrismaModule } from './prisma/prisma.module';
 import database from './config/database.config';
+import jwt from './config/jwt.config';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      // cache: true,
+      cache: true,
       envFilePath: [
         '.env',
         '.env.development.local',
@@ -16,7 +17,7 @@ import database from './config/database.config';
         '.env.development.testing',
         '.env.production',
       ],
-      load: [database],
+      load: [database, jwt],
     }),
     AuthModule,
     PrismaModule,
