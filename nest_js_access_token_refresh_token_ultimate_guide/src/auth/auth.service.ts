@@ -112,6 +112,7 @@ export class AuthService {
     const result = await this._prismaService.user.updateMany({
       where: {
         id: userId,
+        hashedRt: { not: null },
       },
       data: {
         hashedRt: null,

@@ -3,6 +3,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { Tokens } from 'src/auth/types';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
+import * as moment from 'moment';
 
 export const compareHashData = async (
   data: string,
@@ -36,7 +37,7 @@ export const getTokens = async (
   userId: number,
   email: string,
 ): Promise<Tokens> => {
-  const [at, rt] = await Promise.all([
+  const [at, at_expire, rt, rt_expire] = await Promise.all([
     jwtService.signAsync(
       {
         sub: userId,
@@ -47,6 +48,7 @@ export const getTokens = async (
         expiresIn: 60 * 15,
       },
     ),
+    moment().add(15, 'minutes').unix(),
     jwtService.signAsync(
       {
         sub: userId,
@@ -57,7 +59,13 @@ export const getTokens = async (
         expiresIn: 60 * 60 * 24 * 7,
       },
     ),
+    moment().add(7, 'days').unix(),
   ]);
 
-  return { access_token: at, refresh_token: rt } as Tokens;
+  return {
+    access_token: at,
+    access_token_expires_in: at_expire,
+    refresh_token: rt,
+    refresh_token_expires_in: rt_expire,
+  } as Tokens;
 };
