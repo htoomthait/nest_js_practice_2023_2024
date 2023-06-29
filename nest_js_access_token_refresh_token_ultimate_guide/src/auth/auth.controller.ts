@@ -1,7 +1,8 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, HttpCode, HttpStatus } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthSignUpDto, AuthSignInDto } from './dto';
 import { Tokens } from './types';
+import { Public, GetCurrentUserId } from '../common/decorators';
 
 @Controller('auth')
 export class AuthController {
@@ -10,25 +11,34 @@ export class AuthController {
   constructor(private authService: AuthService) {
     this._authService = authService;
   }
-  @Post('/loca/signup')
-  public async signupLocal(
-    @Body() authSignUpDto: AuthSignUpDto,
-  ): Promise<Tokens> {
-    return await this._authService.signupLocal(authSignUpDto);
+  @Public()
+  @Post('/local/signup')
+  @HttpCode(HttpStatus.CREATED)
+  signupLocal(@Body() authSignUpDto: AuthSignUpDto): Promise<Tokens> {
+    return this._authService.signupLocal(authSignUpDto);
   }
 
-  @Post('/loca/signin')
-  public async signinLocal(@Body() authSignInDto: AuthSignInDto) {
-    return await this._authService.signinLocal(authSignInDto);
+  @Public()
+  @Post('/local/signin')
+  @HttpCode(HttpStatus.OK)
+  signinLocal(@Body() authSignInDto: AuthSignInDto) {
+    return this._authService.signinLocal(authSignInDto);
   }
 
+  @Public()
   @Post('/logout')
-  public logout() {
-    return this._authService.logout();
+  @HttpCode(HttpStatus.OK)
+  logout(@GetCurrentUserId() userId: number): Promise<boolean> {
+    return this._authService.logout(userId);
   }
 
+  @Public()
   @Post('/refresh')
-  public refreshTokens() {
-    return this._authService.refreshTokens();
+  @HttpCode(HttpStatus.OK)
+  refreshTokens(
+    @GetCurrentUserId() userId: number,
+    @Body() rt: string,
+  ): Promise<Tokens> {
+    return this._authService.refreshTokens(userId, rt);
   }
 }

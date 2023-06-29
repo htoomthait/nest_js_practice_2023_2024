@@ -43,5 +43,14 @@ async function bootstrap() {
     Logger.log(`dot env file path: ${join(process.cwd(), '.env')}`);
     Logger.log(`.env file: ${JSON.stringify(file)}`, 'Bootstrap');
   }, 1000);
+
+  // check jwt secret key
+  Logger.log(
+    `jwt at secrect key : ${configService.get<string>(
+      'jwt.accessTokenSecret',
+    )}`,
+    'jwt key check',
+  );
 }
+
 bootstrap();
