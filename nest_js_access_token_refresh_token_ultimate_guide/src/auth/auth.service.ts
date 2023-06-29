@@ -6,13 +6,7 @@ import { Tokens } from './types';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { Logger } from '@nestjs/common';
-import * as argon from 'argon2';
-import {
-  hashData,
-  updateRtHash,
-  getTokens,
-  compareHashData,
-} from 'src/common/helpers';
+import { hashData, updateRtHash, getTokens } from 'src/common/helpers';
 
 @Injectable()
 export class AuthService {

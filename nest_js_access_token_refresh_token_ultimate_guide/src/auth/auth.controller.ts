@@ -5,12 +5,13 @@ import {
   HttpCode,
   HttpStatus,
   UseGuards,
+  Logger,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthSignUpDto, AuthSignInDto } from './dto';
 import { Tokens } from './types';
-import { Public, GetCurrentUserId } from '../common/decorators';
-import { AuthGuard } from '@nestjs/passport';
+import { Public, GetCurrentUserId, GetCurrentUser } from '../common/decorators';
+import { RtGuard } from 'src/common/guards';
 
 @Controller('auth')
 export class AuthController {
@@ -33,8 +34,6 @@ export class AuthController {
     return this._authService.signinLocal(authSignInDto);
   }
 
-  @Public()
-  @UseGuards(AuthGuard('jwt'))
   @Post('/logout')
   @HttpCode(HttpStatus.OK)
   logout(@GetCurrentUserId() userId: number): Promise<boolean> {
@@ -42,13 +41,14 @@ export class AuthController {
   }
 
   @Public()
-  @UseGuards(AuthGuard('jwt-refresh'))
+  @UseGuards(RtGuard)
   @Post('/refresh')
   @HttpCode(HttpStatus.OK)
   refreshTokens(
-    @GetCurrentUserId() userId: number,
-    @Body() payload,
+    @GetCurrentUser('sub') userId: number,
+    @GetCurrentUser('refreshToken') rt: string,
   ): Promise<Tokens> {
-    return this._authService.refreshTokens(userId, payload.rt);
+    Logger.debug(`UserId: ${userId}`, 'refreshTokens@authController');
+    return this._authService.refreshTokens(userId, rt);
   }
 }
