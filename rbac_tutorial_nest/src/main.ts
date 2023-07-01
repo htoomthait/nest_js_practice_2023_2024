@@ -1,15 +1,40 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
-import { Logger, LogLevel } from '@nestjs/common';
+import { Logger, LogLevel, ValidationPipe } from '@nestjs/common';
 import * as fs from 'fs';
 import { join } from 'path';
+import * as session from 'express-session';
 
 async function bootstrap() {
   const logLevel: LogLevel[] = ['error', 'warn', 'debug', 'log', 'verbose'];
   const app = await NestFactory.create(AppModule, {
     logger: logLevel,
   });
+
+  app.use(
+    session({
+      resave: false,
+      saveUninitialized: false,
+      name: 'session',
+      secret: '128h381h38',
+      cookie: {
+        secure: false,
+      },
+    }),
+  );
+
+  app.enableCors({
+    origin: 'http://localhost:5173',
+    credentials: true,
+  });
+
+  app.useGlobalPipes(
+    new ValidationPipe({
+      forbidNonWhitelisted: true,
+      transform: true,
+    }),
+  );
 
   await app.listen(process.env.APP_RUNNING_PORT || 5000);
 

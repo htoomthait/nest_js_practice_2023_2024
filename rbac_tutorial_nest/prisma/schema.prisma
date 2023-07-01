@@ -30,7 +30,7 @@ model Department{
   updatedAt DateTime @updatedAt 
 
   name String @unique
-  description String
+  description String @default("N/A")
   usersLink UserDepartmentLink[]
 }
 
