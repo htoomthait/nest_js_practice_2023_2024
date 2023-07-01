@@ -6,6 +6,48 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
   url      = env("DATABASE_URL")
+}
+
+model User{
+  id Int @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt 
+
+
+  username  String  @unique
+  password  String  
+  fullname  String
+  salary    String 
+  contactInfo String
+  departmentsLink UserDepartmentLink[]
+}
+
+model Department{
+  id Int @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt 
+
+  name String @unique
+  description String
+  usersLink UserDepartmentLink[]
+}
+
+model UserDepartmentLink {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  role     String // USER, ADMIN, MANAGER
+  jobTitle String
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
+
+  departmentId Int
+  department   Department @relation(fields: [departmentId], references: [id])
+
+  assignedAt DateTime @default(now())
+  assignedBy String
 }
