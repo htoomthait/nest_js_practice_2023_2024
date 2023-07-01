@@ -1,13 +1,14 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
-import { Logger } from '@nestjs/common';
+import { Logger, LogLevel } from '@nestjs/common';
 import * as fs from 'fs';
 import { join } from 'path';
 
 async function bootstrap() {
+  const logLevel: LogLevel[] = ['error', 'warn', 'debug', 'log', 'verbose'];
   const app = await NestFactory.create(AppModule, {
-    logger: ['error', 'warn', 'debug', 'log', 'verbose'],
+    logger: logLevel,
   });
 
   await app.listen(process.env.APP_RUNNING_PORT || 5000);
