@@ -6,6 +6,7 @@ import { ConfigModule } from '@nestjs/config';
 import database from './config/database.config';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
+import { EmployeeDataModule } from './employee-data/employee-data.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { AuthModule } from './auth/auth.module';
     PrismaModule,
     UserModule,
     AuthModule,
+    EmployeeDataModule,
   ],
   controllers: [AppController],
   providers: [AppService],
