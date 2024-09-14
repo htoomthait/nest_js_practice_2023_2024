@@ -1,42 +1,42 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, HttpCode, HttpStatus, Logger, Param, Post, Res } from '@nestjs/common';
+import { RacingCarService } from './racing_car.service';
+import { GenericApiResponseDto } from 'src/dto/generic_api_response.dto';
+import { Response } from 'express';
 
 @Controller('racing-car')
 export class RacingCarController {
 
+    private fmtResp: GenericApiResponseDto;
+    private readonly logger = new Logger(RacingCarController.name);
 
+    constructor(private racingCarservice: RacingCarService,) { }
 
     @Get('list')
-    getRacingCarList() {
-        const carList = [
-            {
-                "id": 3,
-                "model_name": "abc134",
-                "brand": "porsche",
-                "car_type": "sport racing",
-                "engine_power": "720 hp"
-            },
-            {
-                "id": 4,
-                "model_name": "afg134",
-                "brand": "toyota",
-                "car_type": "sport racing",
-                "engine_power": "640 hp"
-            },
-            {
-                "id": 5,
-                "model_name": "afg145",
-                "brand": "alfa romeo",
-                "car_type": "sport racing",
-                "engine_power": "730 hp"
-            },
-        ];
+    @HttpCode(200)
+    getRacingCarList(@Res() res: Response) {
+        const carList = this.racingCarservice.getCarList();
+        this.logger.log("this is racing list api called");
+        this.logger.debug(carList);
 
 
-        return {
-            "status": "success",
-            "message": "successfuly queried car list",
-            "data": carList
+        this.fmtResp = {
+            status: "success",
+            message: "successfuly queried car list",
+            data: carList
         };
+
+
+        return res.status(HttpStatus.ACCEPTED).send(this.fmtResp);
+    }
+
+    @Post('record-new')
+    createNewRecord() {
+        return "you have created new record";
+    }
+
+    @Get('get-by-id/:id')
+    getRecordById(@Param('id') id: number) {
+        return `here is requested record ${id}`;
     }
 
 
