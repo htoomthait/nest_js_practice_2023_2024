@@ -36,12 +36,28 @@ export class RacingCarService {
 
     }
 
-    async deleteRecord(id: number) {
+    async deleteRecordById(id: number) {
         const dummyData = await this.jsnDataService.getDataFromJson();
 
         const fitlerRecords = dummyData.filter(car => car.id != id);
 
         this.jsnDataService.setDataToJson(fitlerRecords);
+
+        return true;
+
+    }
+
+    async updatedRecordById(updatedRecord: any, id: number) {
+        const dummyData = await this.jsnDataService.getDataFromJson();
+
+        const updatedDummyData = dummyData.map(car => {
+            if (car.id == id) {
+                return car = updatedRecord;
+            }
+            return car;
+        });
+
+        this.jsnDataService.setDataToJson(updatedDummyData);
 
         return true;
 

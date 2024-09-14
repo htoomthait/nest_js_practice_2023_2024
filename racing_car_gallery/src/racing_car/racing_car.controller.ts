@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Logger, Param, Post, Res } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Logger, Param, Post, Put, Res } from '@nestjs/common';
 import { RacingCarService } from './racing_car.service';
 import { GenericApiResponseDto } from 'src/dto/generic_api_response.dto';
 import { Response } from 'express';
@@ -60,12 +60,29 @@ export class RacingCarController {
     @Delete('delete-by-id/:id')
     async deleteRecordById(@Param('id') id: number, @Res() res: Response) {
 
-        this.racingCarservice.deleteRecord(id);
+        this.racingCarservice.deleteRecordById(id);
 
         this.fmtResp = {
             status: "success",
             message: `successfuly delete car with id ${id} from list`,
             data: null
+        };
+
+        return res.status(HttpStatus.ACCEPTED).send(this.fmtResp);
+    }
+
+    @Put('update-by-id/:id')
+    async updateRecordById(
+        @Body() updatedRecord: any,
+        @Param('id') id: number,
+        @Res() res: Response
+    ) {
+        this.racingCarservice.updatedRecordById(updatedRecord, id);
+
+        this.fmtResp = {
+            status: "success",
+            message: `successfully updated with ${id} from list`,
+            data: updatedRecord
         };
 
         return res.status(HttpStatus.ACCEPTED).send(this.fmtResp);
