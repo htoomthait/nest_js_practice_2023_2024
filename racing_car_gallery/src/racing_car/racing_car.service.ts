@@ -1,31 +1,49 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
+import { JsonDummyDataService } from './json_dummy_data.service';
 
 @Injectable()
 export class RacingCarService {
+    private readonly logger = new Logger(RacingCarService.name);
 
-    getCarList() {
-        return [
-            {
-                "id": 3,
-                "model_name": "abc134",
-                "brand": "porsche",
-                "car_type": "sport racing",
-                "engine_power": "720 hp"
-            },
-            {
-                "id": 4,
-                "model_name": "afg134",
-                "brand": "toyota",
-                "car_type": "sport racing",
-                "engine_power": "640 hp"
-            },
-            {
-                "id": 5,
-                "model_name": "afg145",
-                "brand": "alfa romeo",
-                "car_type": "sport racing",
-                "engine_power": "730 hp"
-            },
-        ];
+    constructor(private readonly jsnDataService: JsonDummyDataService) { }
+
+    async getCarList() {
+
+        const dummyData = this.jsnDataService.getDataFromJson();
+        return dummyData;
+
+
+    }
+    async getCarById(id: number) {
+        const dummyData = await this.jsnDataService.getDataFromJson();
+        // this.logger.debug(dummyData);
+
+        const searchedData = dummyData.find(car => car.id == id)
+        // this.logger.debug(searchedData);
+
+        return searchedData;
+    }
+
+    async addNewRecord(newRecord: any) {
+        const dummyData = await this.jsnDataService.getDataFromJson();
+
+        dummyData.push(newRecord);
+
+        this.jsnDataService.setDataToJson(dummyData);
+
+        return true;
+
+
+    }
+
+    async deleteRecord(id: number) {
+        const dummyData = await this.jsnDataService.getDataFromJson();
+
+        const fitlerRecords = dummyData.filter(car => car.id != id);
+
+        this.jsnDataService.setDataToJson(fitlerRecords);
+
+        return true;
+
     }
 }

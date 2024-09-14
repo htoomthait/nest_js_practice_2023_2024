@@ -1,7 +1,8 @@
-import { Controller, Get, HttpCode, HttpStatus, Logger, Param, Post, Res } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Logger, Param, Post, Res } from '@nestjs/common';
 import { RacingCarService } from './racing_car.service';
 import { GenericApiResponseDto } from 'src/dto/generic_api_response.dto';
 import { Response } from 'express';
+import { DEFAULT_ECDH_CURVE } from 'tls';
 
 @Controller('racing-car')
 export class RacingCarController {
@@ -13,10 +14,10 @@ export class RacingCarController {
 
     @Get('list')
     @HttpCode(200)
-    getRacingCarList(@Res() res: Response) {
-        const carList = this.racingCarservice.getCarList();
-        this.logger.log("this is racing list api called");
-        this.logger.debug(carList);
+    async getRacingCarList(@Res() res: Response) {
+        const carList = await this.racingCarservice.getCarList();
+        // this.logger.log("this is racing list api called");
+        // this.logger.debug(carList);
 
 
         this.fmtResp = {
@@ -30,14 +31,46 @@ export class RacingCarController {
     }
 
     @Post('record-new')
-    createNewRecord() {
-        return "you have created new record";
+    createNewRecord(@Body() newRecord: any, @Res() res: Response) {
+
+        this.racingCarservice.addNewRecord(newRecord);
+        this.fmtResp = {
+            status: "success",
+            message: "successfuly recorded new car",
+            data: newRecord
+        }
+
+        return res.status(HttpStatus.ACCEPTED).send(this.fmtResp);
+
     }
 
     @Get('get-by-id/:id')
-    getRecordById(@Param('id') id: number) {
-        return `here is requested record ${id}`;
+    async getRecordById(@Param('id') id: number, @Res() res: Response) {
+        const searchedCarById = await this.racingCarservice.getCarById(id);
+        // this.logger.debug(searchedCarById);
+        this.fmtResp = {
+            status: "success",
+            message: "successfuly queried car list",
+            data: searchedCarById
+        };
+
+        return res.status(HttpStatus.ACCEPTED).send(this.fmtResp);
     }
+
+    @Delete('delete-by-id/:id')
+    async deleteRecordById(@Param('id') id: number, @Res() res: Response) {
+
+        this.racingCarservice.deleteRecord(id);
+
+        this.fmtResp = {
+            status: "success",
+            message: `successfuly delete car with id ${id} from list`,
+            data: null
+        };
+
+        return res.status(HttpStatus.ACCEPTED).send(this.fmtResp);
+    }
+
 
 
 }
