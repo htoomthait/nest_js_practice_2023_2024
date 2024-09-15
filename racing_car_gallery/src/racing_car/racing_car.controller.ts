@@ -2,15 +2,20 @@ import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Logger, Param, Pos
 import { RacingCarService } from './racing_car.service';
 import { GenericApiResponseDto } from 'src/dto/generic_api_response.dto';
 import { Response } from 'express';
-import { DEFAULT_ECDH_CURVE } from 'tls';
+import ShortUniqueId from 'short-unique-id';
+import * as moment from 'moment';
 
 @Controller('racing-car')
 export class RacingCarController {
 
-    private fmtResp: GenericApiResponseDto;
-    private readonly logger = new Logger(RacingCarController.name);
 
-    constructor(private racingCarservice: RacingCarService,) { }
+    private readonly logger = new Logger(RacingCarController.name);
+    private uid = new ShortUniqueId({ length: 10 });
+
+
+
+    constructor(private racingCarservice: RacingCarService, private fmtResp: GenericApiResponseDto) { }
+
 
     @Get('list')
     @HttpCode(200)
@@ -32,6 +37,12 @@ export class RacingCarController {
 
     @Post('record-new')
     createNewRecord(@Body() newRecord: any, @Res() res: Response) {
+        const shortUuid: string = this.uid.rnd();
+
+        newRecord.id = shortUuid;
+        newRecord.created_at = moment().tz("Asia/Yangon").format();
+        newRecord.updated_at = moment().tz("Asia/Yangon").format();
+
 
         this.racingCarservice.addNewRecord(newRecord);
         this.fmtResp = {
@@ -77,12 +88,14 @@ export class RacingCarController {
         @Param('id') id: number,
         @Res() res: Response
     ) {
-        this.racingCarservice.updatedRecordById(updatedRecord, id);
+        updatedRecord.updated_at = moment().tz("Asia/Yangon").format();
+        const fullUpdatedRecord = await this.racingCarservice.updatedRecordById(updatedRecord, id);
+
 
         this.fmtResp = {
             status: "success",
             message: `successfully updated with ${id} from list`,
-            data: updatedRecord
+            data: fullUpdatedRecord
         };
 
         return res.status(HttpStatus.ACCEPTED).send(this.fmtResp);

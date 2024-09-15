@@ -52,14 +52,17 @@ export class RacingCarService {
 
         const updatedDummyData = dummyData.map(car => {
             if (car.id == id) {
-                return car = updatedRecord;
+                return { ...car, ...updatedRecord };
             }
             return car;
         });
 
-        this.jsnDataService.setDataToJson(updatedDummyData);
+        const fullUpdatedRecord = updatedDummyData.find(car => car.id = id);
 
-        return true;
+        this.jsnDataService.setDataToJson(updatedDummyData);
+        this.logger.debug(fullUpdatedRecord);
+
+        return fullUpdatedRecord;
 
     }
 }

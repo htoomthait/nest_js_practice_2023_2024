@@ -24,8 +24,11 @@
     "@nestjs/core": "^10.0.0",
     "@nestjs/platform-express": "^10.0.0",
     "fs": "0.0.1-security",
+    "moment": "^2.30.1",
+    "moment-timezone": "^0.5.45",
     "reflect-metadata": "^0.2.0",
-    "rxjs": "^7.8.1"
+    "rxjs": "^7.8.1",
+    "short-unique-id": "^5.2.0"
   },
   "devDependencies": {
     "@nestjs/cli": "^10.0.0",
