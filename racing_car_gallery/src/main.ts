@@ -7,23 +7,27 @@ import * as dotenv from 'dotenv';
 import { config } from 'rxjs';
 import { readFile } from 'fs/promises';
 import { writeFile, writeFileSync } from 'fs';
+import { CommandFactory } from 'nest-commander';
 
 async function bootstrap() {
   dotenv.config(); // Loads .env file
+
   const app = await NestFactory.create(AppModule);
   const configureService = new ConfigService();
   const logger = new Logger("Main File");
+
+
 
   const appRunningPort = configureService.get<number>('PORT');
   const dbURL = configureService.get<string>('DATABASE_URL');
 
   logger.verbose(`Running port ${appRunningPort}`);
-  logger.verbose(`DB URL : ${dbURL}`);
+  // logger.verbose(`DB URL : ${dbURL}`);
 
 
 
 
-  logger.debug(process.env.DB_HOST);
+  // logger.debug(process.env.DB_HOST);
 
 
   const dbProvider = process.env.DB_PROVIDER
@@ -36,9 +40,9 @@ async function bootstrap() {
   const databaseUrl = `${dbProvider}://${dbUsername}:${dbPassword}@${dbHost}:${dbPort}/${dbName}`; // db url concat
   const dotEnvFilePath = configureService.get<string>('DOT_ENV_FILE_PATH');
 
-  logger.debug(databaseUrl);
+  // logger.debug(databaseUrl);
   const dotEnvFileData = await readFile(dotEnvFilePath, 'utf-8');
-  logger.debug(dotEnvFileData);
+  // logger.debug(dotEnvFileData);
 
   const updatedEnvFileData = dotEnvFileData.replace(`DATABASE_URL=""`, `DATABASE_URL="${databaseUrl}"`);
 
@@ -54,6 +58,10 @@ async function bootstrap() {
 
 
   await app.listen(appRunningPort);
+  await CommandFactory.run(AppModule, ['log', 'warn', 'error', 'debug', 'verbose']);
+
+
+
 
 
 }

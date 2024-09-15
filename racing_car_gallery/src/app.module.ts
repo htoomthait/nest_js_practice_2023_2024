@@ -9,7 +9,9 @@ import { CarBranchController } from './car_branch/car_branch.controller';
 import { GenericApiResponseDto } from './dto/generic_api_response.dto';
 import { ConfigModule } from '@nestjs/config';
 import { PrismaModule } from './prisma/prisma.module';
+import { CliModule } from './cli/cli.module';
 import * as process from 'process';
+import { GreetCommand } from './cli/commands/greet.command';
 
 const getEnvFilePath = () => {
   const logger = new Logger("App Module");
@@ -29,6 +31,6 @@ const getEnvFilePath = () => {
     envFilePath: getEnvFilePath(), // Load the appropriate .env file based on the environment
   }), PrismaModule,],
   controllers: [AppController, CarBranchController],
-  providers: [AppService, CarBranchService, GenericApiResponseDto],
+  providers: [AppService, CarBranchService, GenericApiResponseDto, GreetCommand],
 })
 export class AppModule { }
