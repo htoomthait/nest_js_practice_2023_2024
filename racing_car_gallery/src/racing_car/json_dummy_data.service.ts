@@ -11,7 +11,7 @@ export class JsonDummyDataService {
 
     async getDataFromJson() {
         // Get file path
-        const filePath = join(__dirname, "..", "..", "/dummy_data/racing_cars.json");
+        const filePath = join(__dirname, "..", "..", "..", "/dummy_data/racing_cars.json");
         // this.logger.debug(filePath);
 
 
@@ -29,7 +29,7 @@ export class JsonDummyDataService {
     }
 
     setDataToJson(newData) {
-        const filePath = join(__dirname, "..", "..", "/dummy_data/racing_cars.json");
+        const filePath = join(__dirname, "..", "..", "..", "/dummy_data/racing_cars.json");
         writeFileSync(filePath, JSON.stringify(newData), 'utf-8');
 
     }

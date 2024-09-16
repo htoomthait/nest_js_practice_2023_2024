@@ -9,4 +9,10 @@ export class CarTypeService {
     async getCarTypes() {
         return this.prisma.carType.findMany();
     }
+
+    async getDbCarTypeById(id: number) {
+        return this.prisma.carType.findUnique({
+            where: { id: id }
+        });
+    }
 }

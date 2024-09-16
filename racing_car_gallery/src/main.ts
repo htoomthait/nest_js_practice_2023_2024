@@ -58,7 +58,7 @@ async function bootstrap() {
 
 
   await app.listen(appRunningPort);
-  await CommandFactory.run(AppModule, ['log', 'warn', 'error', 'debug', 'verbose']);
+  // await CommandFactory.run(AppModule, ['log', 'warn', 'error', 'debug', 'verbose']);
 
 
 
