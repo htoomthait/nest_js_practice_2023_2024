@@ -12,52 +12,35 @@ export class CarTypeController {
 
     @Get("/list")
     async getAllCarType(@Res() res: Response) {
-        const carTypes = await this.carTypeService.getCarTypes();
+        const respData = await this.carTypeService.getCarTypes();
 
-        this.fmtResp.status = "succees";
-        this.fmtResp.message = "successfuly query car types";
-        this.fmtResp.data = carTypes;
-
-        return res.status(HttpStatus.OK).send(this.fmtResp);
+        return res.status(respData.httpStatus).send(respData.fmtResp);
     }
 
     @Get("/get-by-id/:id")
     async getCarTypeById(@Param("id") id: string, @Res() res: Response) {
         this.logger.debug(id);
 
-        const carType = await this.carTypeService.getDbCarTypeById(parseInt(id));
-        this.logger.debug(carType);
+        const respData = await this.carTypeService.getDbCarTypeById(parseInt(id));
 
-        this.fmtResp.status = "succees";
-        this.fmtResp.message = "successfuly query car types";
-        this.fmtResp.data = carType;
-
-        return res.status(HttpStatus.OK).send(this.fmtResp);
+        return res.status(respData.httpStatus).send(respData.fmtResp);
     }
 
     @Post("/create-new")
     async createNewCartype(@Body() newRecord: any, @Res() res: Response) {
 
-        const createdNewCarType = await this.carTypeService.createNewCarType(newRecord);
+        const respData = await this.carTypeService.createNewCarType(newRecord);
 
-        this.fmtResp.status = "succees";
-        this.fmtResp.message = "successfuly created car types";
-        this.fmtResp.data = createdNewCarType;
-
-        return res.status(HttpStatus.OK).send(this.fmtResp);
+        return res.status(respData.httpStatus).send(respData.fmtResp);
     }
 
 
 
     @Delete("/delete-by-id/:id")
     async deleteCarType(@Param("id") id: string, @Res() res: Response) {
-        this.carTypeService.deleteCarTypeById(parseInt(id));
+        const respData = await this.carTypeService.deleteCarTypeById(parseInt(id));
 
-        this.fmtResp.status = "succees";
-        this.fmtResp.message = "successfuly created car types";
-        this.fmtResp.data = `Successfully deleted car type with id ${id}`;
-
-        return res.status(HttpStatus.OK).send(this.fmtResp);
+        return res.status(respData.httpStatus).send(respData.fmtResp);
     }
 
     @Patch("/update-by-id/:id")
@@ -65,16 +48,12 @@ export class CarTypeController {
         @Body() updatedCarType: any,
         @Param("id") id: string,
         @Res() res: Response) {
-        const dbUpdatedCarType = await this.carTypeService.updateCarTypeById(
+        const respData = await this.carTypeService.updateCarTypeById(
             updatedCarType,
             parseInt(id)
         );
 
-        this.fmtResp.status = "succees";
-        this.fmtResp.message = "successfuly created car types";
-        this.fmtResp.data = dbUpdatedCarType;
-
-        return res.status(HttpStatus.OK).send(this.fmtResp);
+        return res.status(respData.httpStatus).send(respData.fmtResp);
 
     }
 
