@@ -1,12 +1,12 @@
 import { HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { UtilityService } from 'src/utility/utility.service';
+import { RespUtilityService } from 'src/utility/resp-utility.service';
 
 @Injectable()
 export class CarTypeService {
 
     private logger = new Logger(CarTypeService.name);
-    constructor(private prisma: PrismaService, private uitlityService: UtilityService) { }
+    constructor(private prisma: PrismaService, private respUitlityService: RespUtilityService) { }
 
     async getCarTypes() {
         let carTypes;
@@ -17,15 +17,14 @@ export class CarTypeService {
 
         } catch (error) {
             this.logger.error(error);
-            return this.uitlityService.respWithDefaultDatabaseError();
+            return this.respUitlityService.respWithDefaultDatabaseError();
         }
 
-        return this.uitlityService.composeResponse(
-            "success",
-            "Successfuly query the car types",
-            carTypes,
-            HttpStatus.OK
-        );
+        return this.respUitlityService
+            .setStatus("success")
+            .setMessage("Successfuly query the car types")
+            .setData(carTypes)
+            .composeResponse();
     }
 
     async getDbCarTypeById(id: number) {
@@ -37,25 +36,21 @@ export class CarTypeService {
             });
         } catch (error) {
             this.logger.error(error);
-            return this.uitlityService.respWithDefaultDatabaseError();
+            return this.respUitlityService.respWithDefaultDatabaseError();
         }
 
 
         if (!carType) {
-            return this.uitlityService.composeResponse(
-                "not found",
-                `Car type not found with provided id ${id}`,
-                null,
-                HttpStatus.OK
-            );
+            return this.respUitlityService
+                .setMessage(`Car type not found with provided id ${id}`)
+                .respDefaultNotFound();
         }
         else {
-            return this.uitlityService.composeResponse(
-                "success",
-                "Successfuly query the car type",
-                carType,
-                HttpStatus.OK
-            );
+            return this.respUitlityService
+                .setStatus("success")
+                .setMessage("Successfully query the car type")
+                .setData(carType)
+                .composeResponse();
         }
     }
 
@@ -68,15 +63,15 @@ export class CarTypeService {
             });
         } catch (error) {
             this.logger.error(error);
-            return this.uitlityService.respWithDefaultDatabaseError();
+            return this.respUitlityService.respWithDefaultDatabaseError();
         }
 
-        return this.uitlityService.composeResponse(
-            "success",
-            "Successfuly query the car type",
-            createdCarType,
-            HttpStatus.OK
-        );
+        return this.respUitlityService
+            .setStatus("success")
+            .setMessage("Successfuly query the car type")
+            .setData(createdCarType)
+            .setHttpStatus(HttpStatus.CREATED)
+            .composeResponse();
 
 
     }
@@ -90,16 +85,13 @@ export class CarTypeService {
             });
         } catch (error) {
             this.logger.error(error);
-            this.uitlityService.respWithDefaultDatabaseError();
+            this.respUitlityService.respWithDefaultDatabaseError();
         }
 
         if (checkRecord == 0) {
-            return this.uitlityService.composeResponse(
-                "not found",
-                `Car type not found by provided id ${id}`,
-                null,
-                HttpStatus.NOT_FOUND
-            );
+            return this.respUitlityService
+                .setMessage(`Car type not found by provided id ${id}`)
+                .respDefaultNotFound();
         }
 
         try {
@@ -109,16 +101,14 @@ export class CarTypeService {
         } catch (error) {
 
             this.logger.error(`#dete_car_type_by_id ${error}`);
-            return this.uitlityService.respWithDefaultDatabaseError();
+            return this.respUitlityService.respWithDefaultDatabaseError();
 
         }
 
-        return this.uitlityService.composeResponse(
-            "success",
-            `Car type with id ${id} is deleted successfully!`,
-            null,
-            HttpStatus.OK
-        );
+        return this.respUitlityService
+            .setStatus("success")
+            .setMessage(`Car type with id ${id} is deleted successfully!`)
+            .composeResponse();
     }
 
     async updateCarTypeById(updatedCarType: any, id: number) {
@@ -129,16 +119,14 @@ export class CarTypeService {
             });
         } catch (error) {
             this.logger.error(error);
-            this.uitlityService.respWithDefaultDatabaseError();
+            this.respUitlityService.respWithDefaultDatabaseError();
         }
 
         if (checkRecord == 0) {
-            return this.uitlityService.composeResponse(
-                "not found",
-                `Car type not found by provided id ${id}`,
-                null,
-                HttpStatus.NOT_FOUND
-            );
+            return this.respUitlityService
+                .setMessage(`Car type not found by provided id ${id}`)
+                .respDefaultNotFound();
+
         }
 
         let dbUpdatedCarType;
@@ -150,16 +138,22 @@ export class CarTypeService {
             })
         } catch (error) {
             this.logger.error(error);
-            return this.uitlityService.respWithDefaultDatabaseError();
+
+            return this.respUitlityService.respWithDefaultDatabaseError();
         }
 
-        return this.uitlityService.composeResponse(
-            "success",
-            `Car type with id ${id} is updated successfully!`,
-            updatedCarType,
-            HttpStatus.OK
-        );
+        return this.respUitlityService
+            .setStatus("success")
+            .setMessage(`Car type with id ${id} is updated successfully!`)
+            .setData(dbUpdatedCarType)
+            .setHttpStatus(HttpStatus.OK)
+            .composeResponse();
+
+
 
 
     }
+
+
+
 }

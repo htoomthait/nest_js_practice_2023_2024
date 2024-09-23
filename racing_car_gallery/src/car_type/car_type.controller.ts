@@ -3,6 +3,7 @@ import { CarTypeService } from './car_type.service';
 import { GenericApiResponseDto } from 'src/dto/generic_api_response.dto';
 import { Response } from 'express';
 
+
 @Controller('car-type')
 export class CarTypeController {
 
@@ -16,6 +17,7 @@ export class CarTypeController {
 
         return res.status(respData.httpStatus).send(respData.fmtResp);
     }
+
 
     @Get("/get-by-id/:id")
     async getCarTypeById(@Param("id") id: string, @Res() res: Response) {
