@@ -13,6 +13,8 @@ import { CliModule } from './cli/cli.module';
 import * as process from 'process';
 import { GreetCommand } from './cli/commands/greet.command';
 import { UtilityModule } from './utility/utility.module';
+import { QueueModule } from './queue/queue.module';
+import { BullModule } from '@nestjs/bull';
 
 const getEnvFilePath = () => {
   const logger = new Logger("App Module");
@@ -30,7 +32,14 @@ const getEnvFilePath = () => {
   imports: [RacingCarModule, CarTypeModule, CarBrandModule, ConfigModule.forRoot({
     isGlobal: true, // Make the configuration global, available across the entire application
     envFilePath: getEnvFilePath(), // Load the appropriate .env file based on the environment
-  }), PrismaModule, UtilityModule,],
+  }), PrismaModule, UtilityModule, BullModule.forRoot({
+    redis: {
+      host: 'localhost',
+      port: 6379,
+    },
+  }),
+    QueueModule
+  ],
   controllers: [AppController, CarBranchController],
   providers: [AppService, CarBranchService, GenericApiResponseDto, GreetCommand],
 })

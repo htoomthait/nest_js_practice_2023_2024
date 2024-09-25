@@ -101,6 +101,19 @@ export class RacingCarController {
         return res.status(HttpStatus.ACCEPTED).send(this.fmtResp);
     }
 
+    @Get('test-concurrent-task')
+    testConcurrentTask() {
+
+        for (let index = 0; index < 1000; index++) {
+            for (let indexB = 1000; indexB < 2000; indexB++) {
+                this.logger.log(index, indexB);
+            }
+
+        }
+
+        return "task is done";
+    }
+
 
 
 }
