@@ -13,6 +13,7 @@ async function bootstrap() {
   dotenv.config(); // Loads .env file
 
   const app = await NestFactory.create(AppModule);
+  app.useGlobalPipes(new ValidationPipe());
   const configureService = new ConfigService();
   const logger = new Logger("Main File");
 
