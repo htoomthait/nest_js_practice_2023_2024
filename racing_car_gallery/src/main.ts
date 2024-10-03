@@ -1,19 +1,21 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
-import { Logger } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
 import * as dotenv from 'dotenv';
 import { config } from 'rxjs';
 import { readFile } from 'fs/promises';
 import { writeFile, writeFileSync } from 'fs';
 import { CommandFactory } from 'nest-commander';
+import { CustomValidationExceptionFilter } from './utility/custom-validation-exception-filter';
 
 async function bootstrap() {
   dotenv.config(); // Loads .env file
 
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalFilters(new CustomValidationExceptionFilter());
   const configureService = new ConfigService();
   const logger = new Logger("Main File");
 

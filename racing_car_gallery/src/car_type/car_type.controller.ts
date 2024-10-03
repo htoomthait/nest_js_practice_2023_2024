@@ -2,6 +2,7 @@ import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Logger, Param, Pat
 import { CarTypeService } from './car_type.service';
 import { GenericApiResponseDto } from 'src/dto/generic_api_response.dto';
 import { Response } from 'express';
+import { CarTypeDto } from './car_type.dto';
 
 
 @Controller('car-type')
@@ -29,7 +30,7 @@ export class CarTypeController {
     }
 
     @Post("/create-new")
-    async createNewCartype(@Body() newRecord: any, @Res() res: Response) {
+    async createNewCartype(@Body() newRecord: CarTypeDto, @Res() res: Response) {
 
         const respData = await this.carTypeService.createNewCarType(newRecord);
 
