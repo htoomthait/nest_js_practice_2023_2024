@@ -11,14 +11,16 @@ export class CustomValidationExceptionFilter implements ExceptionFilter {
         // console.log(exceptionResponse.message);
 
         // Format the response to be key-value pairs
-        /* const formattedErrors = {};
+        const formattedErrors = {};
         if (Array.isArray(exceptionResponse.message)) {
             exceptionResponse.message.forEach((error: ValidationError) => {
                 const field = error.property;
                 const constraints = error.constraints;
-                formattedErrors[field] = Object.values(constraints).join(', ');
+                // console.log(field);
+                // formattedErrors[field] = Object.values(constraints).join(', ');
             });
-        } */
+        }
+        console.log(formattedErrors);
 
         response.status(status).json({
             status: 'invalid',
