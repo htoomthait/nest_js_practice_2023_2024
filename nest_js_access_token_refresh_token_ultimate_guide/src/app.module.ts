@@ -7,6 +7,7 @@ import jwt from './config/jwt.config';
 import log from './config/log.config';
 import { APP_GUARD } from '@nestjs/core';
 import { AtGuard } from './common/guards';
+import { QuizModule } from './quiz/quiz.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { AtGuard } from './common/guards';
     }),
     AuthModule,
     PrismaModule,
+    QuizModule,
   ],
   controllers: [],
   providers: [
