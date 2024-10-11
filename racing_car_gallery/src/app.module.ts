@@ -15,6 +15,7 @@ import { GreetCommand } from './cli/commands/greet.command';
 import { UtilityModule } from './utility/utility.module';
 import { QueueModule } from './queue/queue.module';
 import { BullModule } from '@nestjs/bull';
+import { UserModule } from './user/user.module';
 
 const getEnvFilePath = () => {
   const logger = new Logger("App Module");
@@ -38,7 +39,8 @@ const getEnvFilePath = () => {
       port: 6379,
     },
   }),
-    QueueModule
+    QueueModule,
+    UserModule
   ],
   controllers: [AppController, CarBranchController],
   providers: [AppService, CarBranchService, GenericApiResponseDto, GreetCommand],

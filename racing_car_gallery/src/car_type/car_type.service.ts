@@ -6,7 +6,7 @@ import { RespUtilityService } from 'src/utility/resp-utility.service';
 export class CarTypeService {
 
     private logger = new Logger(CarTypeService.name);
-    constructor(private prisma: PrismaService, private respUitlityService: RespUtilityService) { }
+    constructor(private prisma: PrismaService, private respUtilityService: RespUtilityService) { }
 
     async getCarTypes() {
         let carTypes;
@@ -17,10 +17,10 @@ export class CarTypeService {
 
         } catch (error) {
             this.logger.error(error);
-            return this.respUitlityService.respWithDefaultDatabaseError();
+            return this.respUtilityService.respWithDefaultDatabaseError();
         }
 
-        return this.respUitlityService
+        return this.respUtilityService
             .setStatus("success")
             .setMessage("Successfuly query the car types")
             .setData(carTypes)
@@ -36,17 +36,17 @@ export class CarTypeService {
             });
         } catch (error) {
             this.logger.error(error);
-            return this.respUitlityService.respWithDefaultDatabaseError();
+            return this.respUtilityService.respWithDefaultDatabaseError();
         }
 
 
         if (!carType) {
-            return this.respUitlityService
+            return this.respUtilityService
                 .setMessage(`Car type not found with provided id ${id}`)
                 .respDefaultNotFound();
         }
         else {
-            return this.respUitlityService
+            return this.respUtilityService
                 .setStatus("success")
                 .setMessage("Successfully query the car type")
                 .setData(carType)
@@ -63,10 +63,10 @@ export class CarTypeService {
             });
         } catch (error) {
             this.logger.error(error);
-            return this.respUitlityService.respWithDefaultDatabaseError();
+            return this.respUtilityService.respWithDefaultDatabaseError();
         }
 
-        return this.respUitlityService
+        return this.respUtilityService
             .setStatus("success")
             .setMessage("Successfuly query the car type")
             .setData(createdCarType)
@@ -85,11 +85,11 @@ export class CarTypeService {
             });
         } catch (error) {
             this.logger.error(error);
-            this.respUitlityService.respWithDefaultDatabaseError();
+            this.respUtilityService.respWithDefaultDatabaseError();
         }
 
         if (checkRecord == 0) {
-            return this.respUitlityService
+            return this.respUtilityService
                 .setMessage(`Car type not found by provided id ${id}`)
                 .respDefaultNotFound();
         }
@@ -101,11 +101,11 @@ export class CarTypeService {
         } catch (error) {
 
             this.logger.error(`#dete_car_type_by_id ${error}`);
-            return this.respUitlityService.respWithDefaultDatabaseError();
+            return this.respUtilityService.respWithDefaultDatabaseError();
 
         }
 
-        return this.respUitlityService
+        return this.respUtilityService
             .setStatus("success")
             .setMessage(`Car type with id ${id} is deleted successfully!`)
             .composeResponse();
@@ -119,11 +119,11 @@ export class CarTypeService {
             });
         } catch (error) {
             this.logger.error(error);
-            this.respUitlityService.respWithDefaultDatabaseError();
+            this.respUtilityService.respWithDefaultDatabaseError();
         }
 
         if (checkRecord == 0) {
-            return this.respUitlityService
+            return this.respUtilityService
                 .setMessage(`Car type not found by provided id ${id}`)
                 .respDefaultNotFound();
 
@@ -139,10 +139,10 @@ export class CarTypeService {
         } catch (error) {
             this.logger.error(error);
 
-            return this.respUitlityService.respWithDefaultDatabaseError();
+            return this.respUtilityService.respWithDefaultDatabaseError();
         }
 
-        return this.respUitlityService
+        return this.respUtilityService
             .setStatus("success")
             .setMessage(`Car type with id ${id} is updated successfully!`)
             .setData(dbUpdatedCarType)

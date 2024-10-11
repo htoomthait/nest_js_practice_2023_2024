@@ -8,10 +8,29 @@ datasource db {
 }
 
 model CarType {
-  id         Int      @id @default(autoincrement())
-  name       String   @db.VarChar(100)
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  id         Int          @id @default(autoincrement())
+  name       String       @db.VarChar(100)
+  status     ActiveStatus @default(active)
+  created_at DateTime     @default(now())
+  updated_at DateTime     @updatedAt
 
   @@map("car_types")
+}
+
+model CarBrand {
+  id                Int          @id @default(autoincrement())
+  name              String       @db.VarChar(128)
+  country_of_origin String       @db.VarChar(128)
+  established_year  Int          @default(1900)
+  logo_img          String       @db.VarChar(512)
+  status            ActiveStatus @default(active)
+  created_at        DateTime     @default(now())
+  updated_at        DateTime     @updatedAt
+
+  @@map("car_brands")
+}
+
+enum ActiveStatus {
+  active
+  inactive
 }
