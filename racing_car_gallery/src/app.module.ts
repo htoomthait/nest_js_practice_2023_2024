@@ -16,6 +16,8 @@ import { UtilityModule } from './utility/utility.module';
 import { QueueModule } from './queue/queue.module';
 import { BullModule } from '@nestjs/bull';
 import { UserModule } from './user/user.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 const getEnvFilePath = () => {
   const logger = new Logger("App Module");
@@ -30,19 +32,30 @@ const getEnvFilePath = () => {
 
 
 @Module({
-  imports: [RacingCarModule, CarTypeModule, CarBrandModule, ConfigModule.forRoot({
-    isGlobal: true, // Make the configuration global, available across the entire application
-    envFilePath: getEnvFilePath(), // Load the appropriate .env file based on the environment
-  }), PrismaModule, UtilityModule, BullModule.forRoot({
-    redis: {
-      host: 'localhost',
-      port: 6379,
-    },
-  }),
+  imports: [
+    RacingCarModule,
+    CarTypeModule,
+    CarBrandModule,
+    ConfigModule.forRoot({
+      isGlobal: true, // Make the configuration global, available across the entire application
+      envFilePath: getEnvFilePath(), // Load the appropriate .env file based on the environment
+
+    }), PrismaModule, UtilityModule, BullModule.forRoot({
+      redis: {
+        host: 'localhost',
+        port: 6379,
+      },
+    }),
     QueueModule,
-    UserModule
+    UserModule,
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '../../', 'uploads'),
+      serveRoot: '/uploads', // The path from which files will be accessible
+    }),
+
   ],
   controllers: [AppController, CarBranchController],
   providers: [AppService, CarBranchService, GenericApiResponseDto, GreetCommand],
+
 })
 export class AppModule { }

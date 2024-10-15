@@ -1,7 +1,9 @@
-import { Controller, Delete, Get, Logger, Param, Patch, Post, Res } from '@nestjs/common';
+import { Controller, Delete, Get, Logger, Param, Patch, Post, Req, Res, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { CarBrandService } from './car_brand.service';
-import { Response } from 'express';
+import { Request, Response } from 'express';
 import { GenericApiResponseDto } from 'src/dto/generic_api_response.dto';
+import { CarBrandLogoImgFileInterceptor } from './car_brand_logo_img.interceptor';
+
 
 @Controller('car-brand')
 export class CarBrandController {
@@ -48,9 +50,16 @@ export class CarBrandController {
     }
 
     @Post("create-new")
+    @UseInterceptors(CarBrandLogoImgFileInterceptor())
     async createCarBrand(
+        @UploadedFile() logo_img: Express.Multer.File,
+        @Req() req: Request,
         @Res() res: Response
     ): Promise<Response<Record<string, GenericApiResponseDto>>> {
+
+        console.log(logo_img);
+        const fileUrl = `${req.protocol}://${req.get('host')}/uploads/car_brand_img/${logo_img.filename}`;
+        console.log(fileUrl);
 
         // Response with custom httpstatus and formatted data
         return res.status(200).send("This is car brand creation");
