@@ -1,5 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { PrismaClient } from '@prisma/client';
+import { PrismaService } from 'src/prisma/prisma.service';
 import { ResponseForController, RespUtilityService } from 'src/utility/resp-utility.service';
 
 @Injectable()
@@ -7,7 +7,7 @@ export class CarBrandService {
     private logger = new Logger(CarBrandService.name);
 
     constructor(
-        private prisma: PrismaClient,
+        private prisma: PrismaService,
         private respUtilityService: RespUtilityService
     ) { }
 
