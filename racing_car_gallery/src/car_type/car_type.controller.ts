@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Logger, Param, Patch, Post, Res, UseInterceptors } from '@nestjs/common';
 import { CarTypeService } from './car_type.service';
-import { GenericApiResponseDto } from 'src/dto/generic_api_response.dto';
+import { GenericApiResponseDto } from '../dto/generic_api_response.dto';
 import { Response } from 'express';
 import { CarTypeDto } from './car_type.dto';
 import { validate } from 'class-validator';

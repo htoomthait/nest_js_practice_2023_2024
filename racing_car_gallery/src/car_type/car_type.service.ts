@@ -1,6 +1,6 @@
 import { HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { RespUtilityService } from 'src/utility/resp-utility.service';
+import { RespUtilityService } from '../utility/resp-utility.service';
 
 @Injectable()
 export class CarTypeService {

@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
-import { ResponseForController, RespUtilityService } from 'src/utility/resp-utility.service';
+import { PrismaService } from '../prisma/prisma.service';
+import { ResponseForController, RespUtilityService } from '../utility/resp-utility.service';
 
 @Injectable()
 export class CarBrandService {

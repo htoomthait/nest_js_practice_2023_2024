@@ -1,18 +1,30 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { CarBranchService } from './car_branch.service';
+import { CarBrandService } from './car_branch.service';
+import { PrismaService } from '../prisma/prisma.service';
+import { RespUtilityService } from '../utility/resp-utility.service';
 
-describe('CarBranchService', () => {
-  let service: CarBranchService;
+describe('CarBrandService', () => {
+  let service: CarBrandService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [CarBranchService],
+      providers: [
+        CarBrandService,
+        PrismaService,
+        {
+          provide: RespUtilityService,
+          useValue: {
+            handleResponse: jest.fn(), // Mock method for RespUtilityService
+          },
+        },
+      ],
     }).compile();
 
-    service = module.get<CarBranchService>(CarBranchService);
+    service = module.get<CarBrandService>(CarBrandService);
   });
 
   it('should be defined', () => {
     expect(service).toBeDefined();
   });
 });
+

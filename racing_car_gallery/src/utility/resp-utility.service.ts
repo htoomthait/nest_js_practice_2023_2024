@@ -1,5 +1,5 @@
 import { HttpStatus, Injectable, Scope } from '@nestjs/common';
-import { GenericApiResponseDto } from 'src/dto/generic_api_response.dto';
+import { GenericApiResponseDto } from '../dto/generic_api_response.dto';
 
 export class ResponseForController {
     fmtResp: GenericApiResponseDto;

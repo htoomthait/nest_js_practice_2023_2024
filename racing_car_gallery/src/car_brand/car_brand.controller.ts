@@ -1,7 +1,7 @@
 import { Controller, Delete, Get, Logger, Param, Patch, Post, Req, Res, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { CarBrandService } from './car_brand.service';
 import { Request, Response } from 'express';
-import { GenericApiResponseDto } from 'src/dto/generic_api_response.dto';
+import { GenericApiResponseDto } from '../dto/generic_api_response.dto';
 import { CarBrandLogoImgFileInterceptor } from './car_brand_logo_img.interceptor';
 
 

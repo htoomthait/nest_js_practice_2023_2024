@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Logger, Param, Post, Put, Res } from '@nestjs/common';
 import { RacingCarService } from './racing_car.service';
-import { GenericApiResponseDto } from 'src/dto/generic_api_response.dto';
+import { GenericApiResponseDto } from '../dto/generic_api_response.dto';
 import { Response } from 'express';
 import ShortUniqueId from 'short-unique-id';
 import * as moment from 'moment';
