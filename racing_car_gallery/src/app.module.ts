@@ -18,6 +18,7 @@ import { BullModule } from '@nestjs/bull';
 import { UserModule } from './user/user.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { CarBranchModule } from './car_branch/car_branch.module';
 
 const getEnvFilePath = () => {
   const logger = new Logger("App Module");
@@ -52,6 +53,7 @@ const getEnvFilePath = () => {
       rootPath: join(__dirname, '../../', 'uploads'),
       serveRoot: '/uploads', // The path from which files will be accessible
     }),
+    CarBranchModule,
 
   ],
   controllers: [AppController, CarBranchController],
